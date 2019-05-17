@@ -1,0 +1,126 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='style'}
+<style>
+    .ul1{word-break: break-all;}
+    .ohidden ul{height: 18px;overflow: hidden;}
+</style>
+{/block}
+{block name='script'}
+<script>
+    $(document).ready(function(){
+        $('a.oall').click(function () {
+            if($(this).attr('class')=='oall'){
+                $('table tbody tr').attr('class','');
+                $('a.un').html('-折叠');
+                $(this).attr('class','uall');
+                $(this).html('-全部');
+            }else{
+                $('table tbody tr').attr('class','ohidden');
+                $('a.un').html('+展开');
+                $(this).attr('class','oall');
+                $(this).html('+全部');
+            }
+        });
+        $('a.un').click(function(){
+            if($(this).parent().parent().attr('class')=='ohidden'){
+                $(this).parent().parent().attr('class','');
+                $(this).html('-折叠');
+            }else{
+                $(this).parent().parent().attr('class','ohidden');
+                $(this).html('+展开');
+            }
+        });
+    });
+    function CheckAll(obj){
+        if($(obj).is(':checked')){
+            $('.chk').attr('checked','checked');
+        }else{
+            $('.chk').removeAttr('checked');
+        }
+    }
+    function MutiDelete(){
+        if(confirm('确定删除选中的内容吗？')){
+            var ids = [];
+            $.each($('.chk'),function(k,v){
+                if($(v).is(':checked')){
+                    ids.push($(v).val());
+                }
+            });
+            $.post("{:url('index/ProjectContent/delContents')}",{'ids':ids.join('|'),'__token__':$("#token").val()},function(re){
+                if(re==1){
+                    $('.chk').parent().parent().remove();
+                }else{
+                    alert(re);
+                }
+            });
+        }
+    }
+</script>
+{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        URL黑名单设置
+                    </div>
+                    <div class="panel-body">
+
+                        <form class="form-inline" action="{:url('index/user/addUrlblack')}" method="post">
+                            {:token()}
+                            <div class="form-group">
+                                <label for="id">项目ID：</label>
+                                <input type="text" class="form-control" name="id" id="id" placeholder="项目ID"> *(必填，需要过滤的项目ID值。左侧已经标注。)
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <label for="url">黑名单URL：</label>
+                                <input type="text" class="form-control" name="url" id="url" placeholder="黑名单URL"> *(禁止与此处toplocation相同URL内容入库)
+                            </div>
+                            <br><br>
+                            <button type="submit" class="btn btn-success">提交</button>
+                            <div>
+                                提示：加入黑名单后，对应项目不会再接受URL的相关cookies信息。(尽量写域名地址，示例：www.xxxx.com/insde.php 如果光写com那么，只要链接中带有com就直接会过滤掉)
+                            </div>
+                        </form>
+                        <hr>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>项目ID</th>
+                                <th>黑名单URL</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $my_urlblacks as $my_urlblack}
+                            <tr>
+                                <th scope="row">{$my_urlblack['project_id']}</th>
+                                <td>{$my_urlblack['url']}</td>
+                                <td>{$my_urlblack['add_time']|date='Y-m-d'}</td>
+                                <td><a href="{:url('index/user/delUrlblack')}?id={$my_urlblack['id']}&__token__={$Request.token}">删除</a></td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                        <div>下方是整站过滤机制，只要您插入的网站域名中出现以下字母，都不会加载xss code。</div>
+                        <table>
+                            {foreach $sys_urlblacks as $sys_urlblack}
+                            <tr>
+                                <td>{$sys_urlblack['url']}</td>
+                            </tr>
+                            {/foreach}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

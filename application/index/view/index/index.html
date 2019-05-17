@@ -1,0 +1,51 @@
+{extend name='common/layout' /}
+{block name='content'}
+<div class="row">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>公告：</strong> {:config('siteconfig.notice')}
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default signin">
+            <div class="panel-heading">登陆</div>
+            <div class="panel-body">
+                <form class="form-horizontal" action="{:url('index/user/dologin')}" method="post">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input type="text" name="username" class="form-control" placeholder="用户名/邮箱">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="密码">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="input-group" style="position: relative;">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-sort"></i></span>
+                                <input type="text" name="captcha" class="form-control" placeholder="验证码"><img src="{:captcha_src()}" alt="" onclick="this.src='{:captcha_src()}?'+Math.random();" style="position: absolute; right: 0px; top: 0px; height: 34px; width: 110px;z-index: 999;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12 text-right">
+                            <button type="submit" class="btn btn-primary btn-block">登陆</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

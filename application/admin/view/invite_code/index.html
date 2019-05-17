@@ -1,0 +1,76 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="page-header">
+            <h1>邀请码管理 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">
+                生成邀请码
+            </button></h1>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">生成邀请码</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form-horizontal" action="{:url('admin/inviteCode/create')}" method="post">
+                                {:token()}
+                                <div class="form-group">
+                                    <label for="number" class="col-sm-2 control-label">数量</label>
+                                    <div class="col-sm-8">
+                                        <input type="number" name="number" class="form-control" max="100" id="number" value="1">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" class="btn btn-default">生成</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th width="30%"># 邀请码</th>
+                <th>状态</th>
+                <th width="15%">添加时间</th>
+                <th width="15%">注册时间</th>
+                <th width="15%">注册用户</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $code_list as $v}
+            <tr>
+                <th scope="row">{$v['invite_key']}</th>
+                {if $v['is_reg']==0}
+                <td>未注册</td>
+                {elseif $v['is_reg']==1}
+                <td>已注册</td>
+                {/if}
+                <td>{$v['add_time']|date='Y-m-d H:i:s'}</td>
+                <td>{$v['reg_time']|date='Y-m-d H:i:s'}</td>
+                <td>{$v['reg_name']|default='无'}</td>
+                <td>
+                    <a href="{:url('admin/InviteCode/delete')}?id={$v['id']}&__token__={$Request.token}"><button type="button" class="btn btn-danger btn-sm">删除</button></a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {$page|raw}
+    </div>
+</div>
+{/block}

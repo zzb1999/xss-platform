@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="{:config('siteconfig.keywords')}">
+    <meta name="description" content="{:config('siteconfig.description')}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {block name='title'}<title>{:config('siteconfig.title')}</title>{/block}
+    <link href="__STATIC__/css/bootstrap.min.css" rel="stylesheet">
+    <link href="__STATIC__/css/style.css" rel="stylesheet">
+    <script src="__STATIC__/js/jquery-3.1.1.min.js"></script>
+    <script src="__STATIC__/js/bootstrap.min.js"></script>
+    {block name='style'}{/block}
+    {block name='script'}{/block}
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="/">Xss平台</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="{:url('index/user/index')}">首页 <span class="sr-only">(current)</span></a></li>
+                            <li><a href="#">友情</a></li>
+                        </ul>
+                        {if session('username')}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">用户：{:session('username')}</a></li>
+                            <li><a href="{:url('index/user/setting')}">个人设置</a></li>
+                            <li><a href="{:url('index/user/urlblack')}">URL黑名单设置</a></li>
+                            <li><a href="{:url('index/user/logout')}">退出</a></li>
+                        </ul>
+                        {else}
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/">登陆</a></li>
+                            <li><a href="{:url('index/user/register')}">注册</a></li>
+                        </ul>
+                        {/if}
+                    </div><!-- /.navbar-collapse -->
+                </div>
+
+            </div><!-- /.container-fluid -->
+        </nav>
+    </div>
+    {block name='content'}
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="alert alert-warning alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <strong>公告：</strong> Better check yourself, you're not looking too good.
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default signin">
+                <div class="panel-heading">登陆</div>
+                <div class="panel-body">
+                    <form class="form-horizontal" action="{:url('index/user/doLogin')}" method="post">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                    <input type="text" name="username" class="form-control" placeholder="用户名/邮箱">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                    <input type="password" name="password" class="form-control" placeholder="密码">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <div class="input-group" style="position: relative;">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-sort"></i></span>
+                                    <input type="text" name="captcha" class="form-control" placeholder="验证码"><img src="{:captcha_src()}" alt="" onclick="this.src='{:captcha_src()}?'+Math.random();" style="position: absolute; right: 0px; top: 0px; height: 34px; width: 110px;z-index: 999;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12 text-right">
+                                <button type="submit" class="btn btn-primary btn-block">登陆</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/block}
+    <div class="row footer">
+        <div class="col-md-8 col-md-offset-2 footer-copy text-center">
+            <div>
+                Copyright © 2015-2019 ixysec.com All Rights Reserved 仅用于安全测试
+            </div>
+            <div>
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>: Q1477821088
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>: admin@ixysec.com
+            </div>
+            <div>
+                编码：laot
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

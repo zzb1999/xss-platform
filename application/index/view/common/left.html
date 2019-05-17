@@ -1,0 +1,32 @@
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="{:url('index/user/index')}">我的项目</a> <span class="pull-right"><a href="{:url('index/project/create')}">创建</a></span></div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-pills-stacked-example">
+                        {foreach $my_project as $v}
+                        <li role="presentation"><a href="{:url('index/project/index',['id'=>$v['id']])}">{$v['title']} - [项目ID:{$v['id']}]</a></li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="{:url('index/module/index')}">我的模块</a> <span class="pull-right"><a href="{:url('index/module/create')}">创建</a></span></div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-pills-stacked-example">
+                        {foreach $my_modules as $my_module}
+                        <li role="presentation"><a href="{:url('index/module/edit',['id'=>$my_module['id']])}">{$my_module['title']}</a></li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><a href="{:url('index/module/open')}">公共模块</a></div>
+                <div class="panel-body">
+                    <ul class="nav nav-pills nav-stacked nav-pills-stacked-example">
+                        {foreach $open_modules as $open_module}
+                        <li role="presentation"><a href="{:url('index/module/view',['id'=>$open_module['id']])}">{$open_module['title']}</a></li>
+                        {/foreach}
+                    </ul>
+                </div>
+            </div>
+        </div>

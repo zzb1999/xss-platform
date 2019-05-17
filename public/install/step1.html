@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据库配置</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row" style="margin-top: 100px;">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">数据库配置</div>
+                <div class="panel-body">
+                    <h3>请在下方填写数据库连接信息，如果你不确定，请联系你的服务提供商。</h3>
+                    <hr>
+                    <form class="form-horizontal" action="?step=step2" method="post">
+                        <div class="form-group">
+                            <label for="host" class="col-sm-3 control-label">数据库的主机名</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="host" id="host" value="127.0.0.1" placeholder="host">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="user" class="col-sm-3 control-label">数据库的用户名</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="user" id="user" placeholder="数据库的用户名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass" class="col-sm-3 control-label">数据库的密码</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="pass" id="pass" placeholder="数据库的密码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbname" class="col-sm-3 control-label">数据库的名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="dbname" id="dbname" placeholder="数据库的名称">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="dbprefix" class="col-sm-3 control-label">数据表的前缀</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="dbprefix" id="dbprefix" placeholder="数据表的前缀">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <button type="submit" class="btn btn-success">开始安装</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

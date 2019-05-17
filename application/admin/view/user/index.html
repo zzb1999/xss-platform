@@ -1,0 +1,40 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="page-header">
+            <h1>用户管理</h1>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>注册时间</th>
+                <th>登陆时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $users as $user}
+            <tr>
+                <th scope="row">{$user['id']}</th>
+                <td>{$user['username']}</td>
+                <td>{$user['reg_time']|date='Y-m-d'}</td>
+                <td>{$user['login_time']|date='Y-m-d'}</td>
+                <td>{if $user['is_prohibit']==0}正常{else}禁用{/if}</td>
+                <td>
+                    <a href="{:url('admin/user/edit',['id'=>$user['id']])}"><button type="button" class="btn btn-info btn-sm">编辑</button></a>
+                    <a href="{:url('admin/user/resetpass')}?id={$user['id']}&__token__={$Request.token}" onclick="return confirm('确定将用户{$user.username}的密码重置为123456吗？')"><button type="button" class="btn btn-success btn-sm">重置密码</button></a>
+                    <a href="{:url('admin/user/delete')}?id={$user['id']}&__token__={$Request.token}" onclick="return confirm('确定要删除该用户吗？')"><button type="button" class="btn btn-danger btn-sm">删除</button></a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+        {$users|raw}
+    </div>
+</div>
+{/block}

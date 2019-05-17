@@ -1,0 +1,141 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='style'}
+<style>
+    .ul1{word-break: break-all;}
+    .ohidden ul{height: 18px;overflow: hidden;}
+</style>
+{/block}
+{block name='script'}
+<script>
+    $(document).ready(function(){
+        $('a.oall').click(function () {
+            if($(this).attr('class')=='oall'){
+                $('table tbody tr').attr('class','');
+                $('a.un').html('-折叠');
+                $(this).attr('class','uall');
+                $(this).html('-全部');
+            }else{
+                $('table tbody tr').attr('class','ohidden');
+                $('a.un').html('+展开');
+                $(this).attr('class','oall');
+                $(this).html('+全部');
+            }
+        });
+        $('a.un').click(function(){
+            if($(this).parent().parent().attr('class')=='ohidden'){
+                $(this).parent().parent().attr('class','');
+                $(this).html('-折叠');
+            }else{
+                $(this).parent().parent().attr('class','ohidden');
+                $(this).html('+展开');
+            }
+        });
+    });
+    function CheckAll(obj){
+        if($(obj).is(':checked')){
+            $('.chk').attr('checked','checked');
+        }else{
+            $('.chk').removeAttr('checked');
+        }
+    }
+    function MutiDelete(){
+        if(confirm('确定删除选中的内容吗？')){
+            var ids = [];
+            $.each($('.chk'),function(k,v){
+                if($(v).is(':checked')){
+                    ids.push($(v).val());
+                }
+            });
+            $.post("{:url('index/ProjectContent/delContents')}",{'ids':ids.join('|'),'__token__':$("#token").val()},function(re){
+                if(re==1){
+                    $('.chk').parent().parent().remove();
+                }else{
+                    alert(re);
+                }
+            });
+        }
+    }
+</script>
+{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        个人设置
+                    </div>
+                    <div class="panel-body">
+                        系统发送邮件提醒：{if config('siteconfig.is_sendemail')==1}<font color="green">已开启</font>{else}<font color="red">未开启</font>{/if} &nbsp;&nbsp;短信提醒：{if config('siteconfig.is_message')==1}<font color="green">已开启</font>{else}<font color="red">未开启</font>{/if}
+                        <hr>
+                        <form class="form-inline" action="{:url('index/user/saveset')}" method="post">
+                            {:token()}
+                            <div class="form-group">
+                                <label for="exampleInputName2">邮箱：</label>
+                                <input type="email" class="form-control" name="email" value="{$user['email']}" id="exampleInputName2" placeholder="邮箱，用于邮件提醒">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    发送邮件提醒：<select name="sendemail" class="form-control">
+                                    <option value="1" {if $user['sendemail']==1}selected{/if}>开启</option>
+                                    <option value="0" {if $user['sendemail']==0}selected{/if}>关闭</option>
+                                </select>
+                                </label>
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <label for="phone">手机：</label>
+                                <input type="phone" class="form-control" name="phone" value="{$user['phone']}" id="phone" placeholder="手机，用于短信提醒">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    发送短信提醒：<select name="sendmessage" class="form-control">
+                                    <option value="1" {if $user['sendmessage']==1}selected{/if}>开启</option>
+                                    <option value="0" {if $user['sendmessage']==0}selected{/if}>关闭</option>
+                                </select>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-success">设置</button>
+                        </form>
+                        <hr>
+                        <form class="form-inline" action="{:url('index/user/resetpass')}" method="post">
+                            {:token()}
+                            <div class="form-group">
+                                <label for="oldpass">原密码 ：</label>
+                                <input type="text" class="form-control" name="oldpass" id="oldpass" placeholder="原密码">
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <label for="password">新密码 ：</label>
+                                <input type="password" class="form-control" name="password" id="password" placeholder="新密码">
+                            </div>
+                            <br><br>
+                            <div class="form-group">
+                                <label for="password2">确认密码：</label>
+                                <input type="password" class="form-control" name="password2" id="password2" placeholder="确认密码">
+                            </div>
+                            <button type="submit" class="btn btn-success">修改密码</button>
+                        </form>
+                        <hr>
+                        <table class="table">
+                            <caption>下面是给您发信的服务器及邮箱，请您把它加入您邮箱的白名单(否则可能会收不到邮件)。</caption>
+                            <tbody>
+                            {foreach $emails as $email}
+                            <tr>
+                                <td>{$email['ehost']}</td>
+                                <td>{$email['euser']}</td>
+                            </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

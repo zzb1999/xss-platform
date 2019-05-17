@@ -1,0 +1,92 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='script'}
+<script>
+    function delkey(obj){
+        $(obj).parent().remove();
+    }
+    function addkey(obj,keyname){
+        var oLi = document.createElement('li');
+        $(obj).parent().before(oLi);
+        var input = document.createElement('input');
+        $(oLi).append(input);
+        var btn = document.createElement('input');
+        $(oLi).append(btn);
+        btn.type = 'button';
+        $(oLi).append(document.createTextNode(' '));
+        $(btn).val('添加');
+        var del = document.createElement('a');
+        $(oLi).append(del);
+        $(del).attr('href','javascript:void(0)');
+        $(del).html('删除');
+        $(btn).click(function(){
+            var text = $(input).val();
+            if(text==''){
+                alert('请输入参数名');
+            }else{
+                $(input).remove();
+                $(btn).remove();
+                var checkbox = document.createElement('input');
+                $(del).before(checkbox);
+                checkbox.type = 'checkbox';
+                checkbox.checked = 'checked';
+                var keyName = keyname != null ? keyname : "keys[]";
+                $(checkbox).attr('name',keyName);
+                $(checkbox).attr('value',text);
+                $(del).before(document.createTextNode(' '+text+' '));
+            }
+        });
+        $(del).click(function () {
+            $(oLi).remove();
+        });
+    }
+</script>
+{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">查看模块</div>
+                    <div class="panel-body">
+                            <input type="hidden" name="id" value="{$module['id']}">
+                            <div class="form-group">
+                                <label for="title">模块名称</label>
+                                <input type="text" name="title" class="form-control" id="title" value="{$module['title']}" disabled placeholder="模块名称最长30个字符" style="width: 350px;">
+                            </div>
+                            <div class="form-group">
+                                <label for="description">模块描述</label>
+                                <textarea class="form-control" disabled name="description" id="description" rows="3"style="width: 350px;">{$module['description']}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>参数 (需要服务器接收的参数名)</label>
+                                <ul>
+                                    {foreach :json_decode($module['keys']) as $key}
+                                    <li> <input type="checkbox" name="keys[]" disabled checked value="{$key}"> {$key} </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label>配置参数 (使用此模块时需要配置的参数，如参数名为user，则代码引用：{set.user})</label>
+                                <ul>
+                                    {foreach :json_decode($module['setkeys']) as $setkey}
+                                    <li> <input type="checkbox" checked name="setkeys[]" disabled value="{$setkey}"> {$setkey} </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                            <div class="form-group">
+                                <label>代码 ({xssurl}为平台url地址,{projectId}为项目id,{set.***}为***配置参数)</label>
+                                <textarea class="form-control" disabled rows="3" name="code">{$module['code']}</textarea>
+                            </div>
+
+                            <button type="button" class="btn btn-success" onclick="history.go(-1)">返回</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

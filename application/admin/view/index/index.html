@@ -1,0 +1,18 @@
+{extend name='common/layout' /}
+{block name='title'}<title>后台首页</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="page-header">
+            <h1>后台首页</h1>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">上次登陆IP：{$admin['last_ip']}</li>
+            <li class="list-group-item">上次登陆时间：{$admin['login_time']|date='Y-m-d H:i:s'}</li>
+            <li class="list-group-item">邮件提醒：{if config('siteconfig.is_sendemail')==1}<font color="green">已开启</font>{else}<font color="red">未开启</font>{/if}</li>
+            <li class="list-group-item">用户数量：{$user_num}</li>
+            <li class="list-group-item">项目内容总数：{$projectcontent_num}</li>
+        </ul>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,39 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">公共模块</div>
+
+                    <!-- Table -->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>模块名称</th>
+                            <th width="50%">模块描述</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $open_modules as $open_module}
+                        <tr>
+                            <td><a href="{:url('index/module/view',['id'=>$open_module['id']])}">{$open_module['title']}</a></td>
+                            <td>{$open_module['description']}</td>
+                            <td>{$open_module['add_time']|date='Y-m-d'}</td>
+                            <td><a href="{:url('index/module/view',['id'=>$open_module['id']])}">查看</a></td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

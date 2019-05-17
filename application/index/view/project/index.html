@@ -1,0 +1,137 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='style'}
+    <style>
+        .ul1{word-break: break-all;}
+        .ohidden ul{height: 18px;overflow: hidden;}
+    </style>
+{/block}
+{block name='script'}
+    <script>
+        $(document).ready(function(){
+            $('a.oall').click(function () {
+                if($(this).attr('class')=='oall'){
+                    $('table tbody tr').attr('class','');
+                    $('a.un').html('-折叠');
+                    $(this).attr('class','uall');
+                    $(this).html('-全部');
+                }else{
+                    $('table tbody tr').attr('class','ohidden');
+                    $('a.un').html('+展开');
+                    $(this).attr('class','oall');
+                    $(this).html('+全部');
+                }
+            });
+            $('a.un').click(function(){
+                if($(this).parent().parent().attr('class')=='ohidden'){
+                    $(this).parent().parent().attr('class','');
+                    $(this).html('-折叠');
+                }else{
+                    $(this).parent().parent().attr('class','ohidden');
+                    $(this).html('+展开');
+                }
+            });
+        });
+        function CheckAll(obj){
+            if($(obj).is(':checked')){
+                $('.chk').attr('checked','checked');
+            }else{
+                $('.chk').removeAttr('checked');
+            }
+        }
+        function MutiDelete(){
+            if(confirm('确定删除选中的内容吗？')){
+                var ids = [];
+                $.each($('.chk'),function(k,v){
+                    if($(v).is(':checked')){
+                        ids.push($(v).val());
+                    }
+                });
+                $.post("{:url('index/ProjectContent/delContents')}",{'ids':ids.join('|'),'__token__':$("#token").val()},function(re){
+                    if(re==1){
+                        $('.chk').parent().parent().remove();
+                    }else{
+                        alert(re);
+                    }
+                });
+            }
+        }
+    </script>
+{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        项目内容
+                        <a href="{:url('index/project/viewcode',['id'=>$project['id']])}" class="pull-right">查看代码</a>
+                        <a href="{:url('index/project/setCode',['id'=>$project['id']])}" class="pull-right" style="margin-right: 10px;">配置</a>
+                    </div>
+                    <div class="panel-body">
+                        <h3>项目名称：{$project['title']}</h3>
+                        <div>
+                            Domain：
+                            <select>
+                                <option>全部</option>
+                                <option>www.ixysec.com</option>
+                            </select>
+                            ←←←此处可选择需要查看的域名
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" onclick="CheckAll(this)"></th>
+                                    <th width="8%"><a href="javascript:void(0)" class="oall">+全部</a></th>
+                                    <th width="12%">时间</th>
+                                    <th width="32%">接收的内容</th>
+                                    <th width="32%">Request Headers</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {foreach $project_contents as $project_content}
+                                <tr class="ohidden">
+                                    <td><input type="checkbox" class="chk" value="{$project_content['id']}"></td>
+                                    <td><a href="javascript:void(0)" class="un">+展开</a></td>
+                                    <td>{$project_content['update_time']|date='Y-m-d H:i:s'}</td>
+                                    <td>
+                                        <ul class="ul1">
+                                            {foreach :json_decode($project_content['content']) as $k=>$v}
+                                            <li>{$k} : {$v}</li>
+                                            {/foreach}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="ul1">
+                                            {foreach :json_decode($project_content['serverContent']) as $k=>$v}
+                                            {if $k == 'IP-ADDR'}
+                                            <li>{$k} : {:urldecode($v)}</li>
+                                            {else}
+                                            <li>{$k} : {$v}</li>
+                                            {/if}
+                                            {/foreach}
+                                        </ul>
+                                    </td>
+                                    <td><a href="{:url('index/ProjectContent/delete')}?id={$project_content['id']}&__token__={$Request.token}" onclick="return confirm('确定删除吗？')">删除</a></td>
+                                </tr>
+                                {/foreach}
+                                </tbody>
+                            </table>
+                            <div style="text-align: center">
+                                {$project_contents|raw}
+                            </div>
+                            <div>选中项操作： <a href="javascript:void(0)" onclick="MutiDelete()">删除</a></div>
+                            <input type="hidden" name="__token__" id="token" value="{$Request.token}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

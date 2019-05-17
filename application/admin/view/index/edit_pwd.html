@@ -1,0 +1,39 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
+        <div class="page-header">
+            <h1>修改密码</h1>
+        </div>
+        <form class="form-horizontal" action="{:url('admin/index/savepwd')}" method="post">
+            {:token()}
+            <div class="form-group">
+                <label for="oldpass" class="col-sm-2 control-label">原密码：</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" name="oldpass" id="oldpass" placeholder="原密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-2 control-label">新密码：</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password" id="password" placeholder="新密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password2" class="col-sm-2 control-label">确认密码：</label>
+                <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password2" id="password2" placeholder="确认密码">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-success">修改密码</button>
+                    <button type="button" class="btn btn-success" onclick="history.go(-1)">返回</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+{/block}

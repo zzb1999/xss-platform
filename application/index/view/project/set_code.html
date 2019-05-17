@@ -1,0 +1,78 @@
+{extend name='common/layout' /}
+{block name='title'}<title>{$title}</title>{/block}
+{block name='script'}
+    <script>
+        function showContent(id,obj){
+            if($('#'+id).css('display')=='none'){
+                $('#'+id).show();
+                $(obj).html('折叠');
+            }else{
+                $('#'+id).hide();
+                $(obj).html('展开');
+            }
+        }
+    </script>
+{/block}
+{block name='content'}
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+            {include file='common/left' /}
+            <div class="col-md-9">
+                <div class="panel panel-default">
+                    <!-- Default panel contents -->
+                    <div class="panel-heading">
+                        配置代码
+                    </div>
+                    <div class="panel-body">
+                        <h3>项目名称：{$project['title']}</h3>
+                        <form action="{:url('index/project/savesetcode')}" method="post">
+                            {:token()}
+                            <input type="hidden" name="id" value="{$project['id']}">
+                            <ul>
+                                {foreach $modules as $v}
+                                <li>
+                                    {if in_array($v['id'],json_decode($project['modules']))}
+                                    <input type="checkbox" value="{$v['id']}" name="modules[]" checked onclick="if(this.checked){$('#mset_'+this.value).show()}else{$('#mset_'+this.value).hide()}"> {$v['title']}
+                                    {else}
+                                    <input type="checkbox" value="{$v['id']}" name="modules[]" onclick="if(this.checked){$('#mset_'+this.value).show()}else{$('#mset_'+this.value).hide()}"> {$v['title']}
+                                    {/if}
+                                    <a href="javascript:void(0)" onclick="showContent('m_{$v.id}',this)">展开</a>
+                                    {if count(json_decode($v.setkeys)) > 0}
+                                    <div id="mset_{$v['id']}" style="display: {if in_array($v['id'],json_decode($project['modules']))}block{else}none{/if};">
+                                        需要配置的参数：<br>
+                                        {foreach :json_decode($v.setkeys) as $setkey}
+                                            {if $v.id==1 && $setkey=='keepsession'}
+                                            <input type="radio" name="setkey_{$v.id}_{$setkey}" value="0" {if !array_key_exists('setkey_'.$v['id'].'_'.$setkey,$moduleSetKeys)}checked{elseif array_key_exists('setkey_'.$v['id'].'_'.$setkey,$moduleSetKeys) && $moduleSetKeys['setkey_'.$v['id'].'_'.$setkey]!=1}checked{/if}>无keepsession
+                                            <input type="radio" name="setkey_{$v.id}_{$setkey}" value="1" {if array_key_exists('setkey_'.$v['id'].'_'.$setkey,$moduleSetKeys) &&  $moduleSetKeys['setkey_'.$v['id'].'_'.$setkey]==1}checked{/if}>keepsession
+                                            {else}
+                                            {$setkey}：<input type="text" name="setkey_{$v.id}_{$setkey}" value="{$moduleSetKeys['setkey_'.$v.id.'_'.$setkey]|default=''}"><br>
+                                            {/if}
+                                        {/foreach}
+                                    </div>
+                                    {/if}
+                                    <ul id="m_{$v['id']}" style="display: none;">
+                                        <li style="list-style: none">
+                                            参数：<br>
+                                            <pre>{:implode(',',json_decode($v.keys))}</pre>
+                                            代码：<br>
+                                            <pre style="word-break: break-all;word-wrap: break-word;white-space: pre-wrap;">{$v.code}</pre>
+                                        </li>
+                                    </ul>
+                                </li>
+                                {/foreach}
+                            </ul>
+                            <div class="form-group">
+                                <label for="check"><input type="checkbox" id="check" checked disabled> 自定义代码</label>
+                                <textarea class="form-control" style="width: 300px;" rows="3" name="code">{$project['code']}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success">配置</button>
+                            <button type="button" class="btn btn-success" onclick="history.go(-1)">取消</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
