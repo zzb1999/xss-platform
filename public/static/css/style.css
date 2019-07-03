@@ -1,0 +1,25 @@
+/*全局*/
+a:hover{
+    text-decoration: none;
+}
+pre{
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+/*前台首页*/
+body{
+    background: #fbfbfb;
+}
+.footer{
+    margin-top: 30px;
+}
+.signin{
+    max-width: 330px;
+    margin: 20px auto;
+}
+/*后台登陆页*/
+.login{
+    margin-top: 200px;
+    margin-bottom: 200px;
+}
