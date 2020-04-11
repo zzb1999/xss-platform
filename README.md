@@ -32,6 +32,8 @@ git clone https://github.com/zzb1999/xss-platform
 
 作者也是信息安全和PHP初学者，本项目会长期更新维护，有任何问题反馈或建议都可以联系作者。
 
+2020.04.11
+PS:程序应该有很多bug，感兴趣的朋友可以自己二次开发，这套不打算维护了，有机会用laravel撸一个。
 
 作者：laot
 
